@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    container_name: ps_db5
+    environment:
+      MYSQL_DATABASE: prestashop
+      MYSQL_ROOT_PASSWORD: root
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin5
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+        PMA_HOST: db
+    depends_on:
+        - db
+
+  prestashop:
+    image: prestashop/prestashop:1.7
+    container_name: ps5
+    # environment:
+    #   DB_SERVER: db
+    ports:
+      - 80:80
+    working_dir: /var/www/html
+    environment:
+      PS_DOMAIN: localhost
+      DB_SERVER: db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_DB: prestashop
+    # volumes:
+    #   - ./data:/var/www/html
